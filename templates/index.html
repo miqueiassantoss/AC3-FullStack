@@ -1,0 +1,63 @@
+<html>
+<head>
+        <link rel="stylesheet" href="{{url_for('static', filename='style.css') }}" >
+        <link rel="stylesheet" href="{{url_for('static', filename='contact.css') }}" >
+</head>
+
+<body>
+
+    <div class="row">
+        <form id="form" class="card">
+            <label class="">Nome:</label>
+            <input class="" type="text" name="nome" required minlength="2" />
+
+            <label class="">Time:</label>
+            <input class="" type="text" name="time" required minlength="2" />
+
+            <label class="">Posição:</label>
+            <input class="" type="text" name="posicao" required minlength="2" />
+
+            
+            <input class="" type="submit" value="submit" />
+        </form>
+        <label class="">Retorno</label>
+
+        <textarea class="" id="resp" name="resp" cols="30" rows="10"></textarea>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+
+    <script type="text/javascript">
+        $('#form').submit(function (e) {
+            e.preventDefault();
+
+            var res = {
+                nome: $('[name=nome]').val(),
+                time: $('[name=time]').val(),
+                posicao: $('[name=posicao]').val()
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/ac3',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(res),
+                success: function (callback) {
+                    $('form').each(function () {
+                        this.reset();
+                    });
+                    console.log(callback);
+                    $('#resp').val('Nome: ' + callback.nome + ' - Time: ' + callback.time + ' - Posicao: ' + callback.posicao);
+                },
+                error: function () {
+                    $(this).html("error!");
+                }
+            });
+
+        });
+    </script>
+</body>
+
+</html>
